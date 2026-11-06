@@ -1,6 +1,7 @@
-package vmu
+package main
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 
@@ -19,4 +20,9 @@ func NewClient(uriString string) (*libvirt.Libvirt, error) {
 	}
 
 	return client, nil
+}
+
+func IsLibvirtErrorCode(err error, code libvirt.ErrorNumber) bool {
+	var virtErr libvirt.Error
+	return errors.As(err, &virtErr) && virtErr.Code == uint32(code)
 }
