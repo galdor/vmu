@@ -59,7 +59,8 @@ func cmdCreateProfile(p *program.Program) {
 }
 
 func cmdListProfiles(p *program.Program) {
-	filePaths, err := filepath.Glob(path.Join(ProfileDirectoryPath(), "*"))
+	globExpr := path.Join(ProfileDirectoryPath(), "*", "profile.yaml")
+	filePaths, err := filepath.Glob(globExpr)
 	if err != nil {
 		p.Fatal("cannot evaluate glob expression: %v", err)
 	}
