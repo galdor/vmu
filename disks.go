@@ -7,18 +7,20 @@ import (
 	"libvirt.org/go/libvirtxml"
 )
 
-func CreateDisk(client *libvirt.Libvirt, name string, size int) (string, error) {
+func CreateDisk(
+	client *libvirt.Libvirt, profile *Profile, name string, size int,
+) (string, error) {
 	destroyResources := true
 
 	defer func() {
 		if destroyResources {
-			if err := DestroyDiskIfExists(client, name); err != nil {
+			if err := DestroyDiskIfExists(client, profile, name); err != nil {
 				p.Error("cannot destroy disk: %v", err)
 			}
 		}
 	}()
 
-	pool, err := client.StoragePoolLookupByName("default")
+	pool, err := client.StoragePoolLookupByName(profile.Name)
 	if err != nil {
 		return "", fmt.Errorf("cannot lookup storage pool: %w", err)
 	}
@@ -60,8 +62,10 @@ func CreateDisk(client *libvirt.Libvirt, name string, size int) (string, error) 
 	return volumePath, nil
 }
 
-func DestroyDiskIfExists(client *libvirt.Libvirt, name string) error {
-	pool, err := client.StoragePoolLookupByName("default")
+func DestroyDiskIfExists(
+	client *libvirt.Libvirt, profile *Profile, name string,
+) error {
+	pool, err := client.StoragePoolLookupByName(profile.Name)
 	if err != nil {
 		if IsLibvirtErrorCode(err, libvirt.ErrNoStoragePool) {
 			return nil

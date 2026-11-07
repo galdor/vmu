@@ -35,7 +35,8 @@ func CreateVM(client *libvirt.Libvirt, profile *Profile, vm *VM) error {
 				}
 			}
 
-			if err := DestroyDiskIfExists(client, diskName); err != nil {
+			err := DestroyDiskIfExists(client, profile, diskName)
+			if err != nil {
 				p.Error("cannot destroy disk: %v", err)
 			}
 
@@ -60,7 +61,7 @@ func CreateVM(client *libvirt.Libvirt, profile *Profile, vm *VM) error {
 		return fmt.Errorf("cannot create DHCP host: %w", err)
 	}
 
-	volumePath, err := CreateDisk(client, diskName, vm.DiskSize)
+	volumePath, err := CreateDisk(client, profile, diskName, vm.DiskSize)
 	if err != nil {
 		return fmt.Errorf("cannot create disk: %w", err)
 	}
@@ -210,7 +211,7 @@ func DestroyVMIfExists(
 		return fmt.Errorf("cannot undefine domain %q: %w", domain.Name, err)
 	}
 
-	if err := DestroyDiskIfExists(client, name); err != nil {
+	if err := DestroyDiskIfExists(client, profile, name); err != nil {
 		return fmt.Errorf("cannot destroy disk: %w", err)
 	}
 
