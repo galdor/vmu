@@ -214,5 +214,9 @@ func DestroyVMIfExists(
 		return fmt.Errorf("cannot destroy disk: %w", err)
 	}
 
+	if err := DeleteDHCPHost(client, profile.Name, name); err != nil {
+		return fmt.Errorf("cannot destroy DHCP host: %w", err)
+	}
+
 	return nil
 }
