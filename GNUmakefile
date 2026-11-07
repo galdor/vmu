@@ -15,7 +15,7 @@ build: FORCE
 	CGO_ENABLED=0 \
 	go build -o $(bin_dir) \
 	  -ldflags="-X 'main.BuildId=$(build_id)'" \
-	  go.n16f.net/vmu
+	  github.com/galdor/vmu
 
 check: vet
 

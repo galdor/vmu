@@ -15,6 +15,8 @@ func main() {
 
 	p.AddOption("c", "connect", "uri", string(libvirt.QEMUSystem),
 		"the URI of the hypervisor to connect to")
+	p.AddOption("p", "profile", "name", "default",
+		"the name of the profile")
 
 	AddProfileCommands(p)
 	AddVMCommands(p)
@@ -32,4 +34,15 @@ func ProgramClient() *libvirt.Libvirt {
 	}
 
 	return client
+}
+
+func ProgramProfile() *Profile {
+	name := p.OptionValue("profile")
+
+	profile, err := LoadProfile(name)
+	if err != nil {
+		p.Fatal("cannot load profile %q: %v", name, err)
+	}
+
+	return profile
 }

@@ -27,3 +27,15 @@ func ParseNetworkAddress(s string) (*ipaddr.IPAddress, error) {
 
 	return netAddr, nil
 }
+
+func DHCPIPAddressRange(
+	netAddr *ipaddr.IPAddress,
+) (*ipaddr.IPAddress, *ipaddr.IPAddress) {
+	// Skip the network address and the host address.
+	firstAddr := netAddr.GetLower().Increment(2).WithoutPrefixLen()
+
+	// Skip the broadcast address.
+	lastAddr := netAddr.GetUpper().DecrementSingle().WithoutPrefixLen()
+
+	return firstAddr, lastAddr
+}

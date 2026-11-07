@@ -10,12 +10,8 @@ github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWD
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 go.n16f.net/ark v0.0.0-20261104203529-d9ff5d65c990 h1:6x2HQrygk61ZxeKNSVX1M6OxIluQqJZlmQVRZEfVL3A=
 go.n16f.net/ark v0.0.0-20261104203529-d9ff5d65c990/go.mod h1:EkQLD7Z1IhKoMWX8PUp1fCzN0LYr6BdkLpx0ssSewy8=
-go.n16f.net/pp v0.0.0-20241111134914-47a11939e3c4 h1:hX/bjtwOuAEbL0/n5FLlNI/YygTB17XiBzqd2xnxuJE=
-go.n16f.net/pp v0.0.0-20241111134914-47a11939e3c4/go.mod h1:a83mNyM+0Y4i0ZtwAPRg7xuNHHdgdMT0l1GRGQ6i01c=
 go.n16f.net/program v0.0.0-20260409112752-a081c4918366 h1:qPgFX4NJs5tdwtOUCKvNufeWjaG90qolUIwSjhg10CI=
 go.n16f.net/program v0.0.0-20260409112752-a081c4918366/go.mod h1:bsyHGAIa6zu3rQZQNR55vRSWjQkwR1Qplg5PZA1rzoI=
-go.n16f.net/recordfmt v0.0.0-20261105190846-86addaac5e56 h1:+cw53pSdZFH+VoWW22PmHyEmeIzwEwK7HYS4SFH3s54=
-go.n16f.net/recordfmt v0.0.0-20261105190846-86addaac5e56/go.mod h1:+VZSM+9G2JY4CpjZL2aAeJCuzJDxu767YzqeGNOlSt8=
 go.n16f.net/uuid v0.0.0-20251120121934-372c52119b7f h1:m/JNigzYYBLTtB3/pwNybhpORcBCXJkAlhckpAm9Tbk=
 go.n16f.net/uuid v0.0.0-20251120121934-372c52119b7f/go.mod h1:hvPEWZmyP50in1DH72o5vUvoXFFyfRU6oL+p2tAcbgU=
 go.yaml.in/yaml/v3 v3.0.5 h1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"uuid"
 
 	"github.com/digitalocean/go-libvirt"
@@ -10,37 +11,57 @@ import (
 func AddVMCommands(p *program.Program) {
 	var c *program.Command
 
-	p.AddCommand("create-vm", "create a new VM", cmdCreateVM)
+	c = p.AddCommand("create-vm", "create a new VM", cmdCreateVM)
+	c.AddArgument("name", "the name of the VM")
+	c.AddArgument("cdrom-image", "the path of the initial CDROM image")
+	c.AddOption("", "cpus", "count", "1", "the number of vCPUs")
+	c.AddOption("", "memory", "amount", "1",
+		"the amount of system memory in gibibytes")
+	c.AddOption("", "disk", "size", "10",
+		"the size of the main disk in gibibytes")
 
 	c = p.AddCommand("destroy-vm", "destroy a VM", cmdDestroyVM)
-	c.AddArgument("name", "the name of the VM")
-
-	c = p.AddCommand("start-vm", "start a VM", cmdStartVM)
-	c.AddArgument("name", "the name of the VM")
-
-	c = p.AddCommand("stop-vm", "stop a VM", cmdStopVM)
 	c.AddArgument("name", "the name of the VM")
 
 	p.AddCommand("list-vms", "list VMs", cmdListVMs)
 }
 
 func cmdCreateVM(p *program.Program) {
-	// TODO
+	name := p.ArgumentValue("name")
+	cdromImage := p.ArgumentValue("cdrom-image")
+	nbCPUs := int(p.IntegerOptionValue2("cpus", 1, math.MaxInt32))
+	memory := int(p.IntegerOptionValue2("memory", 1, math.MaxInt32))
+	diskSize := int(p.IntegerOptionValue2("disk", 1, math.MaxInt32))
+
+	vm := VM{
+		Name:       name,
+		Memory:     memory,
+		NbCPUs:     nbCPUs,
+		DiskSize:   diskSize,
+		CDROMImage: cdromImage,
+	}
+
+	profile := ProgramProfile()
+
+	client := ProgramClient()
+	defer client.Disconnect()
+
+	if err := CreateVM(client, profile, &vm); err != nil {
+		p.Fatal("cannot create VM: %v", err)
+	}
 }
 
 func cmdDestroyVM(p *program.Program) {
-	// name := p.ArgumentValue("name")
-	// TODO
-}
+	name := p.ArgumentValue("name")
 
-func cmdStartVM(p *program.Program) {
-	// name := p.ArgumentValue("name")
-	// TODO
-}
+	profile := ProgramProfile()
 
-func cmdStopVM(p *program.Program) {
-	// name := p.ArgumentValue("name")
-	// TODO
+	client := ProgramClient()
+	defer client.Disconnect()
+
+	if err := DestroyVMIfExists(client, profile, name); err != nil {
+		p.Fatal("cannot destroy VM: %v", err)
+	}
 }
 
 func cmdListVMs(p *program.Program) {

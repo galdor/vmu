@@ -15,6 +15,8 @@ func AddProfileCommands(p *program.Program) {
 	c.AddArgument("domain", "the domain used for all VMs in the profile")
 	c.AddArgument("bridge", "the name of the bridge device to create")
 	c.AddArgument("network", "the network to use for VM addresses")
+	c.AddOption("", "hypervisor", "name", DefaultHypervisor(),
+		"the hypervisor used to run VMs")
 	c.AddFlag("f", "force", "delete and recreate the profile and its "+
 		"resources if it already exists")
 
@@ -23,6 +25,7 @@ func AddProfileCommands(p *program.Program) {
 
 func cmdCreateProfile(p *program.Program) {
 	name := p.ArgumentValue("name")
+	hypervisor := p.OptionValue("hypervisor")
 	domain := p.ArgumentValue("domain")
 	bridge := p.ArgumentValue("bridge")
 	force := p.IsOptionSet("force")
@@ -35,6 +38,7 @@ func cmdCreateProfile(p *program.Program) {
 
 	profile := Profile{
 		Name:           name,
+		Hypervisor:     hypervisor,
 		Domain:         domain,
 		Bridge:         bridge,
 		NetworkAddress: netAddr,
@@ -44,7 +48,7 @@ func cmdCreateProfile(p *program.Program) {
 	defer client.Disconnect()
 
 	if force {
-		if err := DeleteProfileIfExists(client, name); err != nil {
+		if err := DestroyProfileIfExists(client, name); err != nil {
 			p.Fatal("cannot delete profile: %v", err)
 		}
 	}
