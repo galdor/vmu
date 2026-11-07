@@ -17,7 +17,7 @@ func CreateStoragePool(client *libvirt.Libvirt, name, dirPath string) error {
 
 	absDirPath, err := filepath.Abs(dirPath)
 	if err != nil {
-		return fmt.Errorf("cannot resolve path: %w", dirPath, err)
+		return fmt.Errorf("cannot resolve path: %w", err)
 	}
 
 	permissions := libvirtxml.StoragePoolTargetPermissions{
