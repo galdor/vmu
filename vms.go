@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
+	"path/filepath"
 
 	"github.com/digitalocean/go-libvirt"
 	"libvirt.org/go/libvirtxml"
@@ -24,6 +26,18 @@ func CreateVM(client *libvirt.Libvirt, profile *Profile, vm *VM) error {
 
 	networkName := profile.Name
 	diskName := vm.Name
+
+	cdromImage, err := filepath.Abs(vm.CDROMImage)
+	if err != nil {
+		return fmt.Errorf("cannot resolve CDROM image path: %w", err)
+	}
+	if _, err := os.Stat(cdromImage); err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("CDROM image not found at %q", cdromImage)
+		}
+		return fmt.Errorf("cannot stat %q: %w", cdromImage, err)
+	}
+	vm.CDROMImage = cdromImage
 
 	defer func() {
 		if destroyResources {
