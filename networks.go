@@ -210,7 +210,7 @@ func PickMACAddress(client *libvirt.Libvirt) (net.HardwareAddr, error) {
 			byte(suffix >> 16), byte(suffix >> 8), byte(suffix),
 		}
 
-		if _, found := addrs[&addr]; !found {
+		if _, found := addrs[addr.String()]; !found {
 			return addr, nil
 		}
 	}
@@ -220,13 +220,13 @@ func PickMACAddress(client *libvirt.Libvirt) (net.HardwareAddr, error) {
 
 func usedMACAddresses(
 	client *libvirt.Libvirt,
-) (map[*net.HardwareAddr]struct{}, error) {
+) (map[string]struct{}, error) {
 	domains, _, err := client.ConnectListAllDomains(1, 0)
 	if err != nil {
 		return nil, fmt.Errorf("cannot list domains: %w", err)
 	}
 
-	addrs := make(map[*net.HardwareAddr]struct{})
+	addrs := make(map[string]struct{})
 
 	for _, domain := range domains {
 		flags := []libvirt.DomainXMLFlags{libvirt.DomainXMLInactive}
@@ -277,7 +277,7 @@ func usedMACAddresses(
 				}
 
 				if bytes.HasPrefix(addr, MACAddressPrefix) {
-					addrs[&addr] = struct{}{}
+					addrs[addr.String()] = struct{}{}
 				}
 			}
 		}
